@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-LIBRARY_JSON := griptape-nodes-library.json
+LIBRARY_JSON := griptape_nodes_ace_step_1_5_library/griptape-nodes-library.json
 
 .PHONY: version/get
 version/get: ## Get version.

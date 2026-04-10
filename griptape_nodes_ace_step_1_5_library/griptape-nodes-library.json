@@ -1,0 +1,50 @@
+{
+    "name": "Griptape Nodes ACE-Step 1.5 Library",
+    "library_schema_version": "0.5.0",
+    "advanced_library_path": "ace_step_1_5_library_advanced.py",
+    "metadata": {
+        "author": "Griptape, Inc.",
+        "description": "ACE-Step 1.5 is an open-source music generation foundation model that combines a Language Model planner with a Diffusion Transformer (DiT) synthesizer. It generates full musical compositions from text prompts and optional reference audio, supporting 10 seconds to 10 minutes of audio at commercial-grade quality. The model supports 1000+ instruments and styles, 50+ vocal languages, cover generation, selective audio repainting, vocal-to-background-music conversion, and LoRA fine-tuning.",
+        "library_version": "0.1.0",
+        "engine_version": "0.77.5",
+        "tags": ["Griptape", "AI", "Audio", "Music", "Generation"],
+        "dependencies": {
+            "pip_dependencies": []
+        },
+        "resources": {
+            "required": {
+                "compute": [["cuda", "mps"], "has_any"]
+            }
+        }
+    },
+    "categories": [
+        {
+            "music_generation": {
+                "color": "border-blue-500",
+                "title": "Music Generation",
+                "description": "Generate music from text prompts and audio references",
+                "icon": "music"
+            }
+        }
+    ],
+    "nodes": [
+        {
+            "class_name": "TextToMusicNode",
+            "file_path": "text_to_music_node.py",
+            "metadata": {
+                "category": "music_generation",
+                "description": "Generate music from a text caption and optional lyrics using the ACE-Step DiT model with optional 5Hz Language Model reasoning.",
+                "display_name": "Text to Music"
+            }
+        },
+        {
+            "class_name": "AudioCoverNode",
+            "file_path": "audio_cover_node.py",
+            "metadata": {
+                "category": "music_generation",
+                "description": "Generate a cover or style-transfer version of a reference audio file, optionally guided by a new caption and lyrics.",
+                "display_name": "Audio Cover"
+            }
+        }
+    ]
+}

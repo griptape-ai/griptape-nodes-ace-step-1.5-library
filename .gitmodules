@@ -1,0 +1,4 @@
+[submodule "griptape_nodes_ace_step_1_5_library/ace-step-1.5"]
+	path = griptape_nodes_ace_step_1_5_library/ace-step-1.5
+	url = https://github.com/ace-step/ACE-Step-1.5
+	branch = main
