@@ -14,9 +14,10 @@ class AceStep15LibraryAdvanced(AdvancedNodeLibrary):
     def before_library_nodes_loaded(self, library_data: LibrarySchema, library: Library) -> None:
         logger.info(f"Loading '{library_data.name}' library...")
         submodule_path = self._init_submodule()
-        if not self._is_installed():
+        if not self._is_installed(submodule_path):
             self._install_from_requirements(submodule_path)
             self._install_package(submodule_path)
+            self._write_installed_sentinel(submodule_path)
 
     def after_library_nodes_loaded(self, library_data: LibrarySchema, library: Library) -> None:
         logger.info(f"Finished loading '{library_data.name}' library")
@@ -57,14 +58,34 @@ class AceStep15LibraryAdvanced(AdvancedNodeLibrary):
             return
         subprocess.check_call([str(venv_python), "-m", "ensurepip", "--upgrade"])
 
-    def _is_installed(self) -> bool:
-        """Check if the submodule package is already installed (used to skip re-installation)."""
+    def _get_submodule_commit(self, submodule_path: Path) -> str:
+        """Return the HEAD commit SHA of the submodule (the version committed by the library author)."""
+        repo = pygit2.Repository(str(submodule_path))
+        return str(repo.head.target)
+
+    def _get_installed_sentinel(self) -> Path:
+        return self._get_library_root() / ".installed_commit"
+
+    def _write_installed_sentinel(self, submodule_path: Path) -> None:
+        self._get_installed_sentinel().write_text(self._get_submodule_commit(submodule_path))
+
+    def _is_installed(self, submodule_path: Path) -> bool:
+        """Return True only if the package is importable AND was installed from the currently-pinned commit.
+
+        This ensures that when a new library version ships with a different submodule commit,
+        the package is reinstalled rather than reusing a stale installation.
+        """
         venv_python = self._get_venv_python_path()
         result = subprocess.run(
             [str(venv_python), "-c", "import acestep"],
             capture_output=True,
         )
-        return result.returncode == 0
+        if result.returncode != 0:
+            return False
+        sentinel = self._get_installed_sentinel()
+        if not sentinel.exists():
+            return False
+        return sentinel.read_text().strip() == self._get_submodule_commit(submodule_path)
 
     def _install_from_requirements(self, submodule_path: Path) -> None:
         """Install dependencies from the submodule's requirements.txt.
