@@ -5,7 +5,7 @@
     "metadata": {
         "author": "Griptape, Inc.",
         "description": "ACE-Step 1.5 is an open-source music generation foundation model that combines a Language Model planner with a Diffusion Transformer (DiT) synthesizer. It generates full musical compositions from text prompts and optional reference audio, supporting 10 seconds to 10 minutes of audio at commercial-grade quality. The model supports 1000+ instruments and styles, 50+ vocal languages, cover generation, selective audio repainting, vocal-to-background-music conversion, and LoRA fine-tuning.",
-        "library_version": "0.1.1",
+        "library_version": "0.2.0",
         "engine_version": "0.77.5",
         "tags": ["Griptape", "AI", "Audio", "Music", "Generation"],
         "dependencies": {
