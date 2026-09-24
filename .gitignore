@@ -1,6 +1,6 @@
 .env
 .venv
-.installed_commit
+.venv-exec
 .scratch/
 __pycache__/
 *.py[cod]
