@@ -4,6 +4,7 @@ from pathlib import Path
 
 from griptape_nodes.node_library.advanced_node_library import AdvancedNodeLibrary
 from griptape_nodes.node_library.library_registry import Library, LibrarySchema
+from griptape_nodes.retained_mode.griptape_nodes import GriptapeNodes
 
 logger = logging.getLogger("ace_step_1_5_library")
 
@@ -11,6 +12,10 @@ logger = logging.getLogger("ace_step_1_5_library")
 class AceStep15LibraryAdvanced(AdvancedNodeLibrary):
     def before_library_nodes_loaded(self, library_data: LibrarySchema, library: Library) -> None:
         logger.info(f"Loading '{library_data.name}' library...")
+        if not GriptapeNodes.LibraryManager().is_worker:
+            # The submodule populates the execution environment (the `acestep` package),
+            # which only the worker imports, so only the worker needs it checked out.
+            return
         self._init_submodule()
 
     def after_library_nodes_loaded(self, library_data: LibrarySchema, library: Library) -> None:
