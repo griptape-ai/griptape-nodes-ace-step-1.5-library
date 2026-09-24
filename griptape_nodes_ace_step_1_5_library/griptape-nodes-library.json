@@ -64,8 +64,12 @@
                 "xxhash"
             ],
             "pip_install_flags": [
-                "--preview",
-                "--torch-backend=auto"
+                "--extra-index-url",
+                "https://download.pytorch.org/whl/cu128",
+                "--extra-index-url",
+                "https://download.pytorch.org/whl/cu130",
+                "--index-strategy",
+                "unsafe-best-match"
             ]
         },
         "resources": {
