@@ -6,7 +6,7 @@
         "author": "Griptape, Inc.",
         "description": "ACE-Step 1.5 is an open-source music generation foundation model that combines a Language Model planner with a Diffusion Transformer (DiT) synthesizer. It generates full musical compositions from text prompts and optional reference audio, supporting 10 seconds to 10 minutes of audio at commercial-grade quality. The model supports 1000+ instruments and styles, 50+ vocal languages, cover generation, selective audio repainting, vocal-to-background-music conversion, and LoRA fine-tuning.",
         "library_version": "0.2.0",
-        "engine_version": "0.77.5",
+        "engine_version": "0.102.0",
         "tags": [
             "Griptape",
             "AI",
@@ -50,7 +50,7 @@
                 "numpy",
                 "pyyaml",
                 "tqdm",
-                "huggingface-hub",
+                "huggingface-hub<2",
                 "peft>=0.18.0",
                 "lycoris-lora",
                 "lightning>=2.0.0",
@@ -64,12 +64,8 @@
                 "xxhash"
             ],
             "pip_install_flags": [
-                "--extra-index-url",
-                "https://download.pytorch.org/whl/cu128",
-                "--extra-index-url",
-                "https://download.pytorch.org/whl/cu130",
-                "--index-strategy",
-                "unsafe-best-match"
+                "--preview",
+                "--torch-backend=auto"
             ]
         },
         "resources": {
