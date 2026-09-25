@@ -1,6 +1,6 @@
 [project]
 name = "griptape-nodes-ace-step-1-5-library"
-version = "0.1.0"
+version = "0.3.0"
 description = "Griptape Nodes ACE-Step 1.5 Library"
 authors = [{ name = "Griptape, Inc.", email = "hello@griptape.ai" }]
 readme = "README.md"
