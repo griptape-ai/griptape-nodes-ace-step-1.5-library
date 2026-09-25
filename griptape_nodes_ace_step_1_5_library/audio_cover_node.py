@@ -192,9 +192,14 @@ class AudioCoverNode(SuccessFailureNode):
 
     def process(self) -> AsyncResult[None]:
         """Kick off async inference."""
-        yield lambda: self._run_inference()
+        device = self.parameter_values.get("device", "auto")
+        if device == "auto":
+            # The engine detects the device without importing torch, which the process that
+            # only edits a workflow does not have.
+            device = self.execution_device
+        yield lambda: self._run_inference(device)
 
-    def _run_inference(self) -> None:
+    def _run_inference(self, device: str) -> None:
         """Run inference (called in background thread via AsyncResult)."""
         # DEFERRED IMPORT: import model code here, not at module top level.
         submodule_root = self._get_submodule_root()
@@ -210,7 +215,6 @@ class AudioCoverNode(SuccessFailureNode):
         dit_config = _repo_to_dit_config(dit_repo_id)
         inference_steps = self.parameter_values.get("inference_steps", 8)
         seed = self.parameter_values.get("seed", -1)
-        device = self.parameter_values.get("device", "auto")
 
         if reference_audio is None:
             raise ValueError("reference_audio is required")
