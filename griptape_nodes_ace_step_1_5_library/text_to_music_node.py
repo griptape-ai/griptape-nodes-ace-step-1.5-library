@@ -269,9 +269,14 @@ class TextToMusicNode(SuccessFailureNode):
 
     def process(self) -> AsyncResult[None]:
         """Kick off async inference."""
-        yield lambda: self._run_inference()
+        device = self.parameter_values.get("device", "auto")
+        if device == "auto":
+            # The engine detects the device without importing torch, which the process that
+            # only edits a workflow does not have.
+            device = self.execution_device
+        yield lambda: self._run_inference(device)
 
-    def _run_inference(self) -> None:
+    def _run_inference(self, device: str) -> None:
         """Run inference (called in background thread via AsyncResult)."""
         # DEFERRED IMPORT: import model code here, not at module top level.
         submodule_root = self._get_submodule_root()
@@ -290,7 +295,6 @@ class TextToMusicNode(SuccessFailureNode):
         bpm = self.parameter_values.get("bpm", 0)
         vocal_language = self.parameter_values.get("vocal_language", "unknown")
         enable_lm = self.parameter_values.get("enable_lm", False)
-        device = self.parameter_values.get("device", "auto")
 
         dit_handler = self._load_dit_handler(dit_config, device)
 
